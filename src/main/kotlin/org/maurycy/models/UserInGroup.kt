@@ -1,6 +1,5 @@
 package org.maurycy.models
 
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntity
 import org.maurycy.models.requests.UserInGroupRequest
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

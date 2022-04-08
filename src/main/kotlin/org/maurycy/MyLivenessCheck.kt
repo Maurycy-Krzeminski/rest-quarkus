@@ -1,11 +1,14 @@
+@file:Suppress("unused", "unused", "unused")
+
 package org.maurycy
 
 import org.eclipse.microprofile.health.HealthCheck
 import org.eclipse.microprofile.health.HealthCheckResponse
 import org.eclipse.microprofile.health.Liveness
 
+@Suppress("unused", "unused", "unused", "unused", "unused", "unused")
 @Liveness
-public class MyLivenessCheck : HealthCheck {
+class MyLivenessCheck : HealthCheck {
 
     override fun call(): HealthCheckResponse {
         return HealthCheckResponse.up("alive")

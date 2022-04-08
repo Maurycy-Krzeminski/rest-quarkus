@@ -1,8 +1,6 @@
 package org.maurycy.models.requests
 
 import org.maurycy.enums.TaskStatus
-import org.maurycy.models.Group
-import org.maurycy.models.User
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 

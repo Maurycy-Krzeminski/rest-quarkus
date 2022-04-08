@@ -2,18 +2,12 @@ package org.maurycy.resources
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
-import org.maurycy.enums.TaskStatus
-import org.maurycy.models.Group
 import org.maurycy.models.Task
-import org.maurycy.models.User
-import org.maurycy.models.requests.GroupRequest
 import org.maurycy.models.requests.TaskRequest
 import org.maurycy.repositories.GroupRepository
 import org.maurycy.repositories.TaskRepository
 import org.maurycy.repositories.UserRepository
 import org.maurycy.utils.PageRequest
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
 import javax.transaction.Transactional
 import javax.validation.Valid
 import javax.ws.rs.BeanParam
