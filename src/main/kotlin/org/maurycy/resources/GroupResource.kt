@@ -2,11 +2,9 @@ package org.maurycy.resources
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
-import org.maurycy.PageRequest
+import org.maurycy.utils.PageRequest
 import org.maurycy.models.Group
-import org.maurycy.models.User
 import org.maurycy.models.requests.GroupRequest
-import org.maurycy.models.requests.UserRequest
 import org.maurycy.repositories.GroupRepository
 import javax.transaction.Transactional
 import javax.validation.Valid

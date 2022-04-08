@@ -17,26 +17,26 @@ import javax.persistence.Table
 class Task : ModelIF<TaskRequest> {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     override var id: Long? = null
 
-    lateinit var name: String
-    lateinit var description: String
+    var name: String? = null
+    var description: String? = null
 
     @Enumerated(EnumType.STRING)
-    lateinit var status: TaskStatus
+    var status: TaskStatus? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    lateinit var group: Group
+    var group: Group? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    lateinit var userCreator: User
+    var userCreator: User? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    lateinit var userAssigned: User
+    var userAssigned: User? = null
 
 }
 

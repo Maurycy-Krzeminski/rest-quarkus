@@ -12,6 +12,6 @@ class UserRepository:PanacheRepository<User>
 @ApplicationScoped
 class GroupRepository:PanacheRepository<Group>
 @ApplicationScoped
-class TaskRepositories:PanacheRepository<Task>
+class TaskRepository:PanacheRepository<Task>
 @ApplicationScoped
 class UserInGroupRepository:PanacheRepository<UserInGroup>

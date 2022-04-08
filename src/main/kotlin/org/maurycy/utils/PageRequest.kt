@@ -1,4 +1,4 @@
-package org.maurycy
+package org.maurycy.utils
 
 import javax.ws.rs.DefaultValue
 import javax.ws.rs.QueryParam

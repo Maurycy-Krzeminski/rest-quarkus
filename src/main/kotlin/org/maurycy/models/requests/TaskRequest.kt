@@ -15,11 +15,11 @@ data class TaskRequest(
     @Enumerated(EnumType.STRING)
     val status: TaskStatus,
 
-    val group: Group,
+    val group: Long,
 
-    val userCreator: User,
+    val userCreator: Long,
 
-    val userAssigned: User,
+    val userAssigned: Long,
 
     ) : ModelRequestIF
 

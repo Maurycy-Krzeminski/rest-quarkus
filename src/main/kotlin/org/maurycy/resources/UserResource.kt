@@ -2,7 +2,7 @@ package org.maurycy.resources
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
-import org.maurycy.PageRequest
+import org.maurycy.utils.PageRequest
 import org.maurycy.models.User
 import org.maurycy.models.requests.UserRequest
 import org.maurycy.repositories.UserRepository
@@ -56,7 +56,7 @@ class UserResource(
             user.userName=userRequest.userName
             user.userStatus=userRequest.userStatus
             user.email=userRequest.email
-            user.email=userRequest.email
+            user.password=userRequest.password
             println("works")
             return Response.ok().build()
         }

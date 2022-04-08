@@ -15,15 +15,14 @@ import javax.persistence.Table
 class User : ModelIF<UserRequest> {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     override var id: Long? = null
-    var email: String=""
-    var userName: String=""
-    var password: String=""
+    var email: String? = null
+    var userName: String? = null
+    var password: String? = null
 
     @Enumerated(EnumType.STRING)
-    var userStatus: UserStatus = UserStatus.INACTIVE
-
+    var userStatus: UserStatus? = null
 
 
 }
