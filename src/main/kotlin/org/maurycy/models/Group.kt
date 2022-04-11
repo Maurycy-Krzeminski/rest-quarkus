@@ -1,6 +1,7 @@
 package org.maurycy.models
 
 import org.maurycy.models.requests.GroupRequest
+import java.util.Objects
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -16,7 +17,9 @@ class Group : ModelIF<GroupRequest> {
 
     var name: String? = null
     var description: String? = null
-
+    override fun hashCode(): Int {
+        return Objects.hashCode(id.toString()+name+description)
+    }
 
 }
 

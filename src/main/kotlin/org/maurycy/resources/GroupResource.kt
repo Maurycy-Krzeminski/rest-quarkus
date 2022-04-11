@@ -12,6 +12,7 @@ import javax.ws.rs.BeanParam
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.HeaderParam
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
@@ -37,6 +38,14 @@ class GroupResource(
 
         return response.build()
     }
+
+    @GET
+    @Path("/{id}")
+    fun getById(@PathParam("id") id:Long): Response? {
+        val group = groupRepository.findById(id) ?: return Response.noContent().build()
+        return Response.ok(group).tag(group.hashCode().toString()).build()
+    }
+
     @POST
     @Transactional
     fun create(): Response {
@@ -48,7 +57,7 @@ class GroupResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id:Long, @Valid groupRequest: GroupRequest): Response {
+    fun update(@PathParam("id") id:Long, @Valid groupRequest: GroupRequest, @HeaderParam("etag") eTag: String): Response {
         val group = groupRepository.findById(id)
 
         if (group != null) {

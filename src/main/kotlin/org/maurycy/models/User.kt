@@ -2,6 +2,7 @@ package org.maurycy.models
 
 import org.maurycy.enums.UserStatus
 import org.maurycy.models.requests.UserRequest
+import java.util.Objects
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -23,7 +24,9 @@ class User : ModelIF<UserRequest> {
 
     @Enumerated(EnumType.STRING)
     var userStatus: UserStatus? = null
-
+    override fun hashCode(): Int {
+        return Objects.hashCode(id.toString()+email+userName+password+userStatus.toString())
+    }
 
 }
 

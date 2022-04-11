@@ -2,6 +2,7 @@ package org.maurycy.models
 
 import org.maurycy.enums.TaskStatus
 import org.maurycy.models.requests.TaskRequest
+import java.util.Objects
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -38,6 +39,10 @@ class Task : ModelIF<TaskRequest> {
     @JoinColumn(name = "id")
     var userAssigned: User? = null
 
+    override fun hashCode(): Int {
+        return Objects.hashCode(id.toString() + name + description + status.toString() +
+                group?.id.toString() + userCreator?.id.toString()+ userAssigned?.id.toString())
+    }
 }
 
 
