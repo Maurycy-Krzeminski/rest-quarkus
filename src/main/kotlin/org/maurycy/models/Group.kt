@@ -12,7 +12,7 @@ import javax.persistence.Table
 @Table(name = "\"Group\"")
 class Group : ModelIF<GroupRequest> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
 
     var name: String? = null

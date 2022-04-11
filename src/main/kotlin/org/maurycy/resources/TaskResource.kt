@@ -14,6 +14,7 @@ import javax.ws.rs.BeanParam
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.HeaderParam
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
@@ -41,6 +42,13 @@ class TaskResource(
         return response.build()
     }
 
+    @GET
+    @Path("/{id}")
+    fun getById(@PathParam("id") id:Long): Response? {
+        val task = taskRepository.findById(id) ?: return Response.noContent().build()
+        return Response.ok(task).tag(task.hashCode().toString()).build()
+    }
+
     @POST
     @Transactional
     fun create(): Response {
@@ -52,12 +60,13 @@ class TaskResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id: Long, @Valid taskRequest: TaskRequest): Response {
+    fun update(@PathParam("id") id: Long, @Valid taskRequest: TaskRequest, @HeaderParam("etag") eTag: String): Response {
         val task = taskRepository.findById(id)
         val userCreator = userRepository.findById(taskRequest.userCreator)
         val userAssigned = userRepository.findById(taskRequest.userAssigned)
         val group = groupRepository.findById(taskRequest.group)
         if (task != null) {
+            if(eTag!=task.hashCode().toString()) return Response.notModified(task.hashCode().toString()).build()
             if (userAssigned != null) {
                 if (group != null) {
                     if (userCreator != null) {

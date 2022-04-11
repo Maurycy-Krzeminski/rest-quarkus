@@ -1,6 +1,7 @@
 package org.maurycy.models
 
 import org.maurycy.models.requests.UserInGroupRequest
+import java.util.Objects
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -13,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "\"UserInGroup\"")
 class UserInGroup : ModelIF<UserInGroupRequest> {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     override var id: Long? = null
 
     @OneToOne
@@ -23,6 +24,10 @@ class UserInGroup : ModelIF<UserInGroupRequest> {
     @OneToOne
     @JoinColumn(name = "id")
     var groupId: Group? = null
+
+    override fun hashCode(): Int {
+        return Objects.hashCode(id.toString()+ userId?.id.toString()+groupId?.id.toString())
+    }
 
 }
 

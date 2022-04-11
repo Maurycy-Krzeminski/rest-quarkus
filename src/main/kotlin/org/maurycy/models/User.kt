@@ -16,7 +16,7 @@ import javax.persistence.Table
 class User : ModelIF<UserRequest> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
     var email: String? = null
     var userName: String? = null

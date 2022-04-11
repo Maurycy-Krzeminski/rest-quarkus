@@ -14,6 +14,7 @@ import javax.ws.rs.BeanParam
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.HeaderParam
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
@@ -53,10 +54,11 @@ class UserInGroupResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id: Long, @Valid userInGroupRequest: UserInGroupRequest): Response {
+    fun update(@PathParam("id") id: Long, @Valid userInGroupRequest: UserInGroupRequest,  @HeaderParam("etag") eTag: String): Response {
         val userInGroup = userInGroupRepository.findById(id)
 
         if (userInGroup != null) {
+            if(eTag!=userInGroup.hashCode().toString()) return Response.notModified(userInGroup.hashCode().toString()).build()
             val user = userRepository.findById(userInGroupRequest.userId)
             val group = groupRepository.findById(userInGroupRequest.groupId)
             if (user != null) {

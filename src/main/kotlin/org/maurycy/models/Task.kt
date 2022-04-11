@@ -18,7 +18,7 @@ import javax.persistence.Table
 class Task : ModelIF<TaskRequest> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
 
     var name: String? = null

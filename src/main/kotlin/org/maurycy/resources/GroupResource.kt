@@ -61,6 +61,7 @@ class GroupResource(
         val group = groupRepository.findById(id)
 
         if (group != null) {
+            if(eTag!=group.hashCode().toString()) return Response.notModified(group.hashCode().toString()).build()
             group.name = groupRequest.name
             group.description = groupRequest.description
             return Response.ok(group).build()

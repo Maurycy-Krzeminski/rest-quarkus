@@ -12,6 +12,7 @@ import javax.ws.rs.BeanParam
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.HeaderParam
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
@@ -49,10 +50,11 @@ class UserResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id:Long, @Valid userRequest: UserRequest):Response{
+    fun update(@PathParam("id") id:Long, @Valid userRequest: UserRequest,  @HeaderParam("etag") eTag: String):Response{
         val user = userRepository.findById(id)
 
         if (user != null) {
+            if(eTag!=user.hashCode().toString()) return Response.notModified(user.hashCode().toString()).build()
             user.userName=userRequest.userName
             user.userStatus=userRequest.userStatus
             user.email=userRequest.email
