@@ -1,4 +1,4 @@
-package org.maurycy.resources
+package org.maurycy.resources.advanced
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort

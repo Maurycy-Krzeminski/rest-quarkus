@@ -1,6 +1,6 @@
 @file:Suppress("unused", "unused", "unused")
 
-package org.maurycy
+package org.maurycy.utils
 
 import org.eclipse.microprofile.health.HealthCheck
 import org.eclipse.microprofile.health.HealthCheckResponse
