@@ -20,8 +20,10 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
 
 @Path("/UserInGroups")
 @Produces(MediaType.APPLICATION_JSON)
@@ -31,15 +33,35 @@ class UserInGroupResource(
     private val userRepository: UserRepository,
     private val groupRepository: GroupRepository
 ) {
+    val PAGE_NUM = "pageNum"
+
+    @Context
+    lateinit var uriInfo: UriInfo
+
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = userInGroupRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list()
-        val count = all.count()
+        val count = all.count().toInt()
+        var pagesCount = count / pageRequest.pageSize
+        if (count % pageRequest.pageSize != 0) {
+            pagesCount += 1
+        }
+        if (list.isEmpty()) {
+            return Response.noContent().build()
+        }
 
-        val response = Response.ok(list).header("count", count)
-
+        val response = Response.ok(list).header("X-count", count).header("X-pages", pagesCount)
+        val page = pageRequest.pageNum
+        val beforeUri = uriInfo.requestUriBuilder.replaceQueryParam(PAGE_NUM, page - 1).build()
+        val nextUri = uriInfo.requestUriBuilder.replaceQueryParam(PAGE_NUM, page + 1).build()
+        if (page + 1 < pagesCount) {
+            response.header("X-next-page", nextUri)
+        }
+        if (page - 1 >= 0) {
+            response.header("X-previous-page", beforeUri)
+        }
         return response.build()
     }
 
@@ -48,7 +70,8 @@ class UserInGroupResource(
     fun create(): Response {
         val userInGroup = UserInGroup()
         userInGroupRepository.persist(userInGroup)
-        return Response.ok(userInGroup).build()
+        val uri = uriInfo.absolutePathBuilder.path(userInGroup.id.toString()).build()
+        return Response.created(uri).entity(userInGroup).build()
     }
 
     @PUT

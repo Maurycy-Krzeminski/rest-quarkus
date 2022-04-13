@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
+@Suppress("EqualsOrHashCode")
 @Entity
 @Table(name = "\"Task\"")
 class Task : ModelIF<TaskRequest> {

@@ -8,6 +8,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
+@Suppress("EqualsOrHashCode")
 @Entity
 @Table(name = "\"Group\"")
 class Group : ModelIF<GroupRequest> {

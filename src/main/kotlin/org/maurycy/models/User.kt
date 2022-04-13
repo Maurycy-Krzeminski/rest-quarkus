@@ -11,6 +11,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
+@Suppress("EqualsOrHashCode")
 @Entity
 @Table(name = "\"User\"")
 class User : ModelIF<UserRequest> {
