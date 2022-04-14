@@ -70,7 +70,7 @@ class TaskResource(
     @GET
     @Path("/{id}")
     fun getById(@PathParam("id") id:Long): Response? {
-        val task = taskRepository.findById(id) ?: return Response.noContent().build()
+        val task = taskRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(task).tag(task.hashCode().toString()).build()
     }
 

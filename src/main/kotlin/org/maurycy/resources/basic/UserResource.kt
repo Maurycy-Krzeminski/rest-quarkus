@@ -61,6 +61,13 @@ class UserResource(
         return response.build()
     }
 
+    @GET
+    @Path("/{id}")
+    fun getById(@PathParam("id") id:Long): Response? {
+        val user = userRepository.findById(id) ?: return Response.status(404).build()
+        return Response.ok(user).tag(user.hashCode().toString()).build()
+    }
+
     @POST
     @Transactional
     fun create(): Response {
@@ -88,7 +95,7 @@ class UserResource(
             user.password = userRequest.password
             return Response.ok(user).build()
         }
-        return Response.noContent().build()
+        return Response.status(404).build()
     }
 
     @DELETE

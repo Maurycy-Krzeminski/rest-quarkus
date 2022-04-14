@@ -64,7 +64,7 @@ class GroupResource(
     @GET
     @Path("/{id}")
     fun getById(@PathParam("id") id:Long): Response? {
-        val group = groupRepository.findById(id) ?: return Response.noContent().build()
+        val group = groupRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(group).tag(group.hashCode().toString()).build()
     }
 

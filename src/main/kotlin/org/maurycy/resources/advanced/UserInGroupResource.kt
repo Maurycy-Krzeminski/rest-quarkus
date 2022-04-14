@@ -64,6 +64,12 @@ class UserInGroupResource(
         }
         return response.build()
     }
+    @GET
+    @Path("/{id}")
+    fun getById(@PathParam("id") id:Long): Response? {
+        val userInGroup = userInGroupRepository.findById(id) ?: return Response.status(404).build()
+        return Response.ok(userInGroup).tag(userInGroup.hashCode().toString()).build()
+    }
 
     @POST
     @Transactional
@@ -92,7 +98,7 @@ class UserInGroupResource(
                 }
             }
         }
-        return Response.noContent().build()
+        return Response.status(404).build()
     }
 
     @DELETE
