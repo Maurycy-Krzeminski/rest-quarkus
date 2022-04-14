@@ -2,6 +2,7 @@ package org.maurycy.resources.basic
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
+import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import org.maurycy.models.Task
 import org.maurycy.models.requests.TaskRequest
 import org.maurycy.repositories.GroupRepository
@@ -28,6 +29,7 @@ import javax.ws.rs.core.UriInfo
 @Path("/Tasks")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "3. Task resource")
 class TaskResource(
     private val taskRepository: TaskRepository,
     private val groupRepository: GroupRepository,

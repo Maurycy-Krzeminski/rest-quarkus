@@ -2,6 +2,7 @@ package org.maurycy.resources.basic
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
+import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import org.maurycy.utils.PageRequest
 import org.maurycy.models.Group
 import org.maurycy.models.requests.GroupRequest
@@ -26,6 +27,7 @@ import javax.ws.rs.core.UriInfo
 @Path("/Groups")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "2. Group resource")
 class GroupResource(
     private val groupRepository: GroupRepository
 ) {

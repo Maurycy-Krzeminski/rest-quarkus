@@ -1,5 +1,6 @@
 package org.maurycy.resources.advanced
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import org.maurycy.models.requests.ChangeTaskUserRequest
 import org.maurycy.repositories.TaskRepository
 import org.maurycy.repositories.UserRepository
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Response
 
 
 @Path("/Tasks/ChangeTaskUser")
+@Tag(name = "5. Change task user resource")
 class ChangeTaskUserResource(
     private val userRepository: UserRepository,
     private val taskRepository: TaskRepository

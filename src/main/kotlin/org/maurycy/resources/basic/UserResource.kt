@@ -2,6 +2,7 @@ package org.maurycy.resources.basic
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
+import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import org.maurycy.models.User
 import org.maurycy.models.requests.UserRequest
 import org.maurycy.repositories.UserRepository
@@ -26,6 +27,7 @@ import javax.ws.rs.core.UriInfo
 @Path("/Users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "1. User resource")
 class UserResource(
     private val userRepository: UserRepository
 ) {

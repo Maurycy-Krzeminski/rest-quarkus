@@ -2,6 +2,7 @@ package org.maurycy.resources.advanced
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
+import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import org.maurycy.utils.PageRequest
 import org.maurycy.models.UserInGroup
 import org.maurycy.models.requests.UserInGroupRequest
@@ -28,6 +29,7 @@ import javax.ws.rs.core.UriInfo
 @Path("/UserInGroups")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "4. User in group resource")
 class UserInGroupResource(
     private val userInGroupRepository: UserInGroupRepository,
     private val userRepository: UserRepository,
