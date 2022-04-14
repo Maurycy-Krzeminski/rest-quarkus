@@ -18,16 +18,12 @@ class UserInGroup : ModelIF<UserInGroupRequest> {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     override var id: Long? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var userId: User? = null
+    var userId: Long? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var groupId: Group? = null
+    var groupId: Long? = null
 
     override fun hashCode(): Int {
-        return Objects.hashCode(id.toString()+ userId?.id.toString()+groupId?.id.toString())
+        return Objects.hashCode(id.toString()+ userId?.toString()+groupId?.toString())
     }
 
 }

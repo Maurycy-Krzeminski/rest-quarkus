@@ -86,8 +86,8 @@ class UserInGroupResource(
             val group = groupRepository.findById(userInGroupRequest.groupId)
             if (user != null) {
                 if (group != null) {
-                    userInGroup.userId = user
-                    userInGroup.groupId = group
+                    userInGroup.userId = user.id
+                    userInGroup.groupId = group.id
                     return Response.ok(userInGroup).build()
                 }
             }
