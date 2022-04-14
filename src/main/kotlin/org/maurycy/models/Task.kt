@@ -28,21 +28,15 @@ class Task : ModelIF<TaskRequest> {
     @Enumerated(EnumType.STRING)
     var status: TaskStatus? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var group: Group? = null
+    var groupId: Long? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var userCreator: User? = null
+    var userCreatorId: Long? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var userAssigned: User? = null
+    var userAssignedId: Long? = null
 
     override fun hashCode(): Int {
         return Objects.hashCode(id.toString() + name + description + status.toString() +
-                group?.id.toString() + userCreator?.id.toString()+ userAssigned?.id.toString())
+                groupId?.toString() + userCreatorId?.toString()+ userAssignedId?.toString())
     }
 }
 
