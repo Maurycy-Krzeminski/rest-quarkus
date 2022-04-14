@@ -2,11 +2,6 @@ package org.maurycy.resources.basic
 
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
-import org.eclipse.microprofile.openapi.annotations.enums.SchemaType
-import org.eclipse.microprofile.openapi.annotations.media.Content
-import org.eclipse.microprofile.openapi.annotations.media.Schema
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses
 import org.maurycy.models.User
 import org.maurycy.models.requests.UserRequest
 import org.maurycy.repositories.UserRepository
