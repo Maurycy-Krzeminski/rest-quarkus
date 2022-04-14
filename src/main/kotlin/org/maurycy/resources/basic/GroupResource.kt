@@ -35,6 +35,7 @@ class GroupResource(
 
     @Context
     lateinit var uriInfo: UriInfo
+
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = groupRepository.findAll(Sort.by("id"))
@@ -65,7 +66,7 @@ class GroupResource(
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id:Long): Response? {
+    fun getById(@PathParam("id") id: Long): Response? {
         val group = groupRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(group).tag(group.hashCode().toString()).build()
     }
@@ -82,21 +83,26 @@ class GroupResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id:Long, @Valid groupRequest: GroupRequest, @HeaderParam("etag") eTag: String): Response {
+    fun update(
+        @PathParam("id") id: Long,
+        @Valid groupRequest: GroupRequest,
+        @HeaderParam("etag") eTag: String
+    ): Response {
         val group = groupRepository.findById(id)
 
         if (group != null) {
-            if(eTag!=group.hashCode().toString()) return Response.notModified(group.hashCode().toString()).build()
+            if (eTag != group.hashCode().toString()) return Response.notModified(group.hashCode().toString()).build()
             group.name = groupRequest.name
             group.description = groupRequest.description
             return Response.ok(group).build()
         }
-        return Response.noContent().build()
+        return Response.status(404).build()
     }
+
     @DELETE
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id:Long):Response{
+    fun update(@PathParam("id") id: Long): Response {
         groupRepository.deleteById(id)
         return Response.noContent().build()
     }

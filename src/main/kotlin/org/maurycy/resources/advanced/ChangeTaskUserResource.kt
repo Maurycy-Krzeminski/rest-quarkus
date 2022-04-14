@@ -6,19 +6,19 @@ import org.maurycy.repositories.TaskRepository
 import org.maurycy.repositories.UserRepository
 import javax.transaction.Transactional
 import javax.validation.Valid
-import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.core.Response
 
 
-@Path("/Tasks/ChangeTaskUser")
-@Tag(name = "5. Change task user resource")
+@Path("/TransferTaskAssignee")
+@Tag(name = "5. Transfer task from old user to new user assignee")
 class ChangeTaskUserResource(
     private val userRepository: UserRepository,
     private val taskRepository: TaskRepository
 ) {
 
-    @POST
+    @PUT
     @Transactional
     fun create(@Valid changeTaskUserRequest: ChangeTaskUserRequest): Response {
 
@@ -27,10 +27,9 @@ class ChangeTaskUserResource(
                 val oldUser = userRepository.findById(changeTaskUserRequest.oldUserId)
                 if (oldUser != null) {
                     val newUser = userRepository.findById(changeTaskUserRequest.newUserId)
-                    if(newUser!=null){
+                    if (newUser != null) {
                         val tasks = taskRepository.findByUser(oldUser)
-                        tasks.list().forEach {
-                            task ->
+                        tasks.list().forEach { task ->
                             task.userAssigned?.id = newUser.id
                             task.userAssigned?.userName = newUser.userName
                             task.userAssigned?.email = newUser.email
@@ -42,7 +41,7 @@ class ChangeTaskUserResource(
                 }
             }
         }
-        return Response.noContent().build()
+        return Response.status(404).build()
     }
 
 }

@@ -66,9 +66,10 @@ class UserInGroupResource(
         }
         return response.build()
     }
+
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id:Long): Response? {
+    fun getById(@PathParam("id") id: Long): Response? {
         val userInGroup = userInGroupRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(userInGroup).tag(userInGroup.hashCode().toString()).build()
     }
@@ -85,11 +86,17 @@ class UserInGroupResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id: Long, @Valid userInGroupRequest: UserInGroupRequest,  @HeaderParam("etag") eTag: String): Response {
+    fun update(
+        @PathParam("id") id: Long,
+        @Valid userInGroupRequest: UserInGroupRequest,
+        @HeaderParam("etag") eTag: String
+    ): Response {
         val userInGroup = userInGroupRepository.findById(id)
 
         if (userInGroup != null) {
-            if(eTag!=userInGroup.hashCode().toString()) return Response.notModified(userInGroup.hashCode().toString()).build()
+            if (eTag != userInGroup.hashCode().toString()) return Response.notModified(
+                userInGroup.hashCode().toString()
+            ).build()
             val user = userRepository.findById(userInGroupRequest.userId)
             val group = groupRepository.findById(userInGroupRequest.groupId)
             if (user != null) {

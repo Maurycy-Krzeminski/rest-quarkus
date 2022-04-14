@@ -65,7 +65,7 @@ class UserResource(
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id:Long): Response? {
+    fun getById(@PathParam("id") id: Long): Response? {
         val user = userRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(user).tag(user.hashCode().toString()).build()
     }
@@ -104,9 +104,7 @@ class UserResource(
     @Transactional
     @Path("/{id}")
     fun update(@PathParam("id") id: Long): Response {
-
         userRepository.deleteById(id)
         return Response.noContent().build()
-
     }
 }

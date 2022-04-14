@@ -71,7 +71,7 @@ class TaskResource(
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id:Long): Response? {
+    fun getById(@PathParam("id") id: Long): Response? {
         val task = taskRepository.findById(id) ?: return Response.status(404).build()
         return Response.ok(task).tag(task.hashCode().toString()).build()
     }
@@ -88,13 +88,17 @@ class TaskResource(
     @PUT
     @Transactional
     @Path("/{id}")
-    fun update(@PathParam("id") id: Long, @Valid taskRequest: TaskRequest, @HeaderParam("etag") eTag: String): Response {
+    fun update(
+        @PathParam("id") id: Long,
+        @Valid taskRequest: TaskRequest,
+        @HeaderParam("etag") eTag: String
+    ): Response {
         val task = taskRepository.findById(id)
         val userCreator = userRepository.findById(taskRequest.userCreator)
         val userAssigned = userRepository.findById(taskRequest.userAssigned)
         val group = groupRepository.findById(taskRequest.group)
         if (task != null) {
-            if(eTag!=task.hashCode().toString()) return Response.notModified(task.hashCode().toString()).build()
+            if (eTag != task.hashCode().toString()) return Response.notModified(task.hashCode().toString()).build()
             if (userAssigned != null) {
                 if (group != null) {
                     if (userCreator != null) {
@@ -109,7 +113,7 @@ class TaskResource(
                 }
             }
         }
-        return Response.noContent().build()
+        return Response.status(404).build()
     }
 
     @DELETE
