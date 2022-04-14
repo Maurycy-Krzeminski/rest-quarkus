@@ -40,9 +40,12 @@ class GroupResource(
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = groupRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
-            .list()
+            .list().toMutableList()
+        while (list.removeIf{
+                it.name==null
+            }){}
 
-        val count = all.count().toInt()
+        val count = list.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
             pagesCount += 1
@@ -66,8 +69,9 @@ class GroupResource(
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id: Long): Response? {
-        val group = groupRepository.findById(id) ?: return Response.status(404).build()
+    fun getById(@PathParam("id") id: Int): Response? {
+        val group = groupRepository.findById(id.toLong()) ?: return Response.status(404).build()
+        if(group.name==null)return Response.status(404).build()
         return Response.ok(group).tag(group.hashCode().toString()).build()
     }
 

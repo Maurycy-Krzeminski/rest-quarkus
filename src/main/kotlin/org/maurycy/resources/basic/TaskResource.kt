@@ -44,8 +44,10 @@ class TaskResource(
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = taskRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
-            .list()
-
+            .list().toMutableList()
+        while (list.removeIf{
+                it.name==null
+            }){}
         val count = all.count().toInt()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
@@ -73,6 +75,7 @@ class TaskResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Long): Response? {
         val task = taskRepository.findById(id) ?: return Response.status(404).build()
+        if(task.name==null)return Response.status(404).build()
         return Response.ok(task).tag(task.hashCode().toString()).build()
     }
 
@@ -105,9 +108,9 @@ class TaskResource(
                         task.name = taskRequest.name
                         task.description = taskRequest.description
                         task.status = taskRequest.status
-                        task.group = group
-                        task.userCreator = userCreator
-                        task.userAssigned = userAssigned
+                        task.groupId = group.id
+                        task.userCreatorId = userCreator.id
+                        task.userAssignedId = userAssigned.id
                         return Response.ok(task).build()
                     }
                 }

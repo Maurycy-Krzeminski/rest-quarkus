@@ -26,16 +26,24 @@ class ChangeTaskUserResource(
             if (changeTaskUserRequest.oldUserId != null) {
                 val oldUser = userRepository.findById(changeTaskUserRequest.oldUserId)
                 if (oldUser != null) {
+                    if(oldUser.userName==null){
+                        return Response.status(404).build()
+                    }
                     val newUser = userRepository.findById(changeTaskUserRequest.newUserId)
                     if (newUser != null) {
-                        val tasks = taskRepository.findByUser(oldUser)
-                        tasks.list().forEach { task ->
-                            task.userAssigned?.id = newUser.id
-                            task.userAssigned?.userName = newUser.userName
-                            task.userAssigned?.email = newUser.email
-                            task.userAssigned?.userStatus = newUser.userStatus
-                            task.userAssigned?.password = newUser.password
+                        if(newUser.userName==null){
+                            return Response.status(404).build()
                         }
+                        val tasks = taskRepository.findByUser(oldUser).list().toMutableList()
+
+                        tasks.forEach { task ->
+                            if(task.name==null){
+                                tasks.remove(task)
+                            }else{
+                            task.userAssignedId = newUser.id
+                        }
+                        }
+                        if (tasks.isEmpty()) return Response.status(404).build()
                         return Response.ok(tasks).build()
                     }
                 }

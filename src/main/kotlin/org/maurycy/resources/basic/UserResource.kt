@@ -39,9 +39,14 @@ class UserResource(
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = userRepository.findAll(Sort.by("id"))
+
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
-            .list()
-        val count = all.count().toInt()
+            .list().toMutableList()
+        while (list.removeIf{
+            it.email==null
+        }){}
+
+        val count = list.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
             pagesCount += 1
@@ -67,6 +72,7 @@ class UserResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Long): Response? {
         val user = userRepository.findById(id) ?: return Response.status(404).build()
+        //if(user.isNull())return Response.status(404).build()
         return Response.ok(user).tag(user.hashCode().toString()).build()
     }
 
@@ -83,11 +89,11 @@ class UserResource(
     @Transactional
     @Path("/{id}")
     fun update(
-        @PathParam("id") id: Long,
+        @PathParam("id") id: Int,
         @Valid userRequest: UserRequest,
         @HeaderParam("etag") eTag: String
     ): Response {
-        val user = userRepository.findById(id)
+        val user = userRepository.findById(id.toLong())
 
         if (user != null) {
             if (eTag != user.hashCode().toString()) return Response.notModified(user.hashCode().toString()).build()

@@ -5,7 +5,6 @@ import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
 import org.maurycy.models.Group
 import org.maurycy.models.Task
 import org.maurycy.models.User
-import org.maurycy.models.UserInGroup
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -18,5 +17,3 @@ class TaskRepository:PanacheRepository<Task>{
         return find("userAssigned",user)
     }
 }
-@ApplicationScoped
-class UserInGroupRepository:PanacheRepository<UserInGroup>
