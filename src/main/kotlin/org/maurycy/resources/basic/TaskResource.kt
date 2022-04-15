@@ -45,9 +45,7 @@ class TaskResource(
         val all = taskRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
-        while (list.removeIf{
-                it.name==null
-            }){}
+
         val count = all.count().toInt()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
@@ -103,8 +101,17 @@ class TaskResource(
         if (task != null) {
             if (eTag != task.hashCode().toString()) return Response.notModified(task.hashCode().toString()).build()
             if (userAssigned != null) {
+                if(userAssigned.email==null){
+                    return Response.status(404).build()
+                }
                 if (group != null) {
+                    if(group.name==null){
+                        return Response.status(404).build()
+                    }
                     if (userCreator != null) {
+                        if(userCreator.email==null){
+                            return Response.status(404).build()
+                        }
                         task.name = taskRequest.name
                         task.description = taskRequest.description
                         task.status = taskRequest.status
