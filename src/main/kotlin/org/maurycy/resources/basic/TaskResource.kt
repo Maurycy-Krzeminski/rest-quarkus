@@ -43,10 +43,18 @@ class TaskResource(
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = taskRepository.findAll(Sort.by("id"))
+        val allCount = all.list().toMutableList()
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
+        while (list.removeIf{
+                it.name==null
+            }){}
 
-        val count = all.count().toInt()
+        while (allCount.removeIf{
+                it.name==null
+            }){}
+
+        val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
             pagesCount += 1

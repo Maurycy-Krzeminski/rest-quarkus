@@ -15,7 +15,7 @@ class GroupRepository:PanacheRepository<Group>
 @ApplicationScoped
 class TaskRepository:PanacheRepository<Task>{
     fun findByUser(user:User): PanacheQuery<Task> {
-        return find("userAssigned",user)
+        return find("userassignedid",user)
     }
 }
 

@@ -44,8 +44,11 @@ class GroupResource(
         while (list.removeIf{
                 it.name==null
             }){}
-
-        val count = list.count()
+        val allCount = all.list().toMutableList()
+        while (allCount.removeIf{
+                it.name==null
+            }){}
+        val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
             pagesCount += 1

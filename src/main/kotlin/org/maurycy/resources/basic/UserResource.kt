@@ -39,14 +39,17 @@ class UserResource(
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = userRepository.findAll(Sort.by("id"))
-
+        val allCount = all.list().toMutableList()
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
         while (list.removeIf{
             it.email==null
         }){}
+        while (allCount.removeIf{
+                it.email==null
+            }){}
 
-        val count = list.count()
+        val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
             pagesCount += 1
@@ -72,7 +75,7 @@ class UserResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Long): Response? {
         val user = userRepository.findById(id) ?: return Response.status(404).build()
-        //if(user.isNull())return Response.status(404).build()
+        if(user.email==null)return Response.status(404).build()
         return Response.ok(user).tag(user.hashCode().toString()).build()
     }
 
@@ -113,4 +116,6 @@ class UserResource(
         userRepository.deleteById(id)
         return Response.noContent().build()
     }
+
+
 }
