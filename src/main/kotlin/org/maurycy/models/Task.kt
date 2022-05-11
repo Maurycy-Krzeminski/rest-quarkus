@@ -9,30 +9,28 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Suppress("EqualsOrHashCode")
 @Entity
 @Table(name = "\"Task\"")
-class Task : ModelIF<TaskRequest> {
+open class Task : ModelIF<TaskRequest> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
 
-    var name: String? = null
-    var description: String? = null
+    open var name: String? = null
+    open var description: String? = null
 
     @Enumerated(EnumType.STRING)
-    var status: TaskStatus? = null
+    open var status: TaskStatus? = null
 
-    var groupId: Long? = null
+    open var groupId: Long? = null
 
-    var userCreatorId: Long? = null
+    open var userCreatorId: Long? = null
 
-    var userAssignedId: Long? = null
+    open var userAssignedId: Long? = null
 
     override fun hashCode(): Int {
         return Objects.hashCode(id.toString() + name + description + status.toString() +

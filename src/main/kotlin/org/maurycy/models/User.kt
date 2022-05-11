@@ -14,17 +14,17 @@ import javax.persistence.Table
 @Suppress("EqualsOrHashCode")
 @Entity
 @Table(name = "\"User\"")
-class User : ModelIF<UserRequest> {
+open class User : ModelIF<UserRequest> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
-    var email: String? = null
-    var userName: String? = null
-    var password: String? = null
+    open var email: String? = null
+    open var userName: String? = null
+    open var password: String? = null
 
     @Enumerated(EnumType.STRING)
-    var userStatus: UserStatus? = null
+    open var userStatus: UserStatus? = null
     override fun hashCode(): Int {
         return Objects.hashCode(id.toString()+email+userName+password+userStatus.toString())
     }

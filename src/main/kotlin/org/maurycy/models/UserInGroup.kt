@@ -9,14 +9,14 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "\"UserInGroup\"")
-class UserInGroup{
+open class UserInGroup{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    open var id: Long? = null
 
     @OneToOne()
-    var user: User? = null
+    open var user: User? = null
 
     @OneToOne()
-    var group: Group? = null
+    open var group: Group? = null
 }
