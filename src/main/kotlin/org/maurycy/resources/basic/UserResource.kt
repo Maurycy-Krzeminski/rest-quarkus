@@ -31,11 +31,13 @@ import javax.ws.rs.core.UriInfo
 class UserResource(
     private val userRepository: UserRepository
 ) {
+    @Suppress("PropertyName")
     val PAGE_NUM = "pageNum"
 
     @Context
     lateinit var uriInfo: UriInfo
 
+    @Suppress("ControlFlowWithEmptyBody")
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = userRepository.findAll(Sort.by("id"))

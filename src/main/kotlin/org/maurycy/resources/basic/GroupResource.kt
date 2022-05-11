@@ -31,12 +31,14 @@ import javax.ws.rs.core.UriInfo
 class GroupResource(
     private val groupRepository: GroupRepository
 ) {
+    @Suppress("PropertyName")
     val PAGE_NUM = "pageNum"
 
     @Context
     lateinit var uriInfo: UriInfo
 
     @GET
+    @Suppress("ControlFlowWithEmptyBody")
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = groupRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))

@@ -35,11 +35,13 @@ class TaskResource(
     private val groupRepository: GroupRepository,
     private val userRepository: UserRepository
 ) {
+    @Suppress("PropertyName")
     val PAGE_NUM = "pageNum"
 
     @Context
     lateinit var uriInfo: UriInfo
 
+    @Suppress("ControlFlowWithEmptyBody")
     @GET
     fun getAll(@BeanParam pageRequest: PageRequest): Response {
         val all = taskRepository.findAll(Sort.by("id"))

@@ -14,9 +14,9 @@ open class UserInGroup{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
 
-    @OneToOne()
+    @OneToOne
     open var user: User? = null
 
-    @OneToOne()
+    @OneToOne
     open var group: Group? = null
 }
