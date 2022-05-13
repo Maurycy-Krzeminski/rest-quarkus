@@ -43,13 +43,15 @@ class GroupResource(
         val all = groupRepository.findAll(Sort.by("id"))
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
-        while (list.removeIf{
-                it.name==null
-            }){}
+        while (list.removeIf {
+                it.name == null
+            }) {
+        }
         val allCount = all.list().toMutableList()
-        while (allCount.removeIf{
-                it.name==null
-            }){}
+        while (allCount.removeIf {
+                it.name == null
+            }) {
+        }
         val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
         if (count % pageRequest.pageSize != 0) {
@@ -76,7 +78,7 @@ class GroupResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Int): Response? {
         val group = groupRepository.findById(id.toLong()) ?: return Response.status(404).build()
-        if(group.name==null)return Response.status(404).build()
+        if (group.name == null) return Response.status(404).build()
         return Response.ok(group).tag(group.hashCode().toString()).build()
     }
 
@@ -86,7 +88,7 @@ class GroupResource(
         val group = Group()
         groupRepository.persist(group)
         val uri = uriInfo.absolutePathBuilder.path(group.id.toString()).build()
-        return Response.created(uri).entity(group).build()
+        return Response.created(uri).entity(group).header("etag", group.hashCode().toString()).build()
     }
 
     @PUT
@@ -95,7 +97,7 @@ class GroupResource(
     fun update(
         @PathParam("id") id: Long,
         @Valid groupRequest: GroupRequest,
-        @HeaderParam("etag") eTag: String
+        @HeaderParam("If-Match") eTag: String?
     ): Response {
         val group = groupRepository.findById(id)
 
@@ -104,6 +106,26 @@ class GroupResource(
             group.name = groupRequest.name
             group.description = groupRequest.description
             return Response.ok(group).build()
+        }
+        return Response.status(404).build()
+    }
+
+    @PUT
+    @Transactional
+    @Path("/{id}")
+    fun firstUpdate(
+        @PathParam("id") id: Long,
+        @Valid groupRequest: GroupRequest,
+    ): Response {
+        val group = groupRepository.findById(id)
+
+        if (group != null) {
+            if (group.name == null) {
+                group.name = groupRequest.name
+                group.description = groupRequest.description
+                return Response.ok(group).build()
+            }
+            return Response.notModified(group.hashCode().toString()).build()
         }
         return Response.status(404).build()
     }

@@ -26,24 +26,24 @@ class ChangeTaskUserResource(
             if (changeTaskUserRequest.oldUserId != null) {
                 val oldUser = userRepository.findById(changeTaskUserRequest.oldUserId)
                 if (oldUser != null) {
-                    if(oldUser.userName==null){
-                        return Response.status(404).build()
+                    if (oldUser.userName == null) {
+                        return Response.status(404).entity("old user not found").build()
                     }
                     val newUser = userRepository.findById(changeTaskUserRequest.newUserId)
                     if (newUser != null) {
-                        if(newUser.userName==null){
-                            return Response.status(404).build()
+                        if (newUser.userName == null) {
+                            return Response.status(404).entity("new user not found").build()
                         }
                         val tasks = taskRepository.findByUser(oldUser).list().toMutableList()
 
                         tasks.forEach { task ->
-                            if(task.name==null){
+                            if (task.name == null) {
                                 tasks.remove(task)
-                            }else{
-                            task.userAssignedId = newUser.id
+                            } else {
+                                task.userAssignedId = newUser.id
+                            }
                         }
-                        }
-                        if (tasks.isEmpty()) return Response.status(404).build()
+                        if (tasks.isEmpty()) return Response.ok("not task modified").build()
                         return Response.ok(tasks).build()
                     }
                 }

@@ -44,12 +44,14 @@ class UserResource(
         val allCount = all.list().toMutableList()
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
-        while (list.removeIf{
-            it.email==null
-        }){}
-        while (allCount.removeIf{
-                it.email==null
-            }){}
+        while (list.removeIf {
+                it.email == null
+            }) {
+        }
+        while (allCount.removeIf {
+                it.email == null
+            }) {
+        }
 
         val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
@@ -77,7 +79,7 @@ class UserResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Long): Response? {
         val user = userRepository.findById(id) ?: return Response.status(404).build()
-        if(user.email==null)return Response.status(404).build()
+        if (user.email == null) return Response.status(404).build()
         return Response.ok(user).tag(user.hashCode().toString()).build()
     }
 
@@ -87,7 +89,7 @@ class UserResource(
         val user = User()
         userRepository.persist(user)
         val uri = uriInfo.absolutePathBuilder.path(user.id.toString()).build()
-        return Response.created(uri).entity(user).build()
+        return Response.created(uri).entity(user).header("etag", user.hashCode().toString()).build()
     }
 
     @PUT
@@ -96,7 +98,7 @@ class UserResource(
     fun update(
         @PathParam("id") id: Int,
         @Valid userRequest: UserRequest,
-        @HeaderParam("etag") eTag: String
+        @HeaderParam("If-Match") eTag: String?
     ): Response {
         val user = userRepository.findById(id.toLong())
 
@@ -107,6 +109,28 @@ class UserResource(
             user.email = userRequest.email
             user.password = userRequest.password
             return Response.ok(user).build()
+        }
+        return Response.status(404).build()
+    }
+
+    @PUT
+    @Transactional
+    @Path("/{id}")
+    fun firstUpdate(
+        @PathParam("id") id: Int,
+        @Valid userRequest: UserRequest,
+    ): Response {
+        val user = userRepository.findById(id.toLong())
+
+        if (user != null) {
+            if (user.userName == null) {
+                user.userName = userRequest.userName
+                user.userStatus = userRequest.userStatus
+                user.email = userRequest.email
+                user.password = userRequest.password
+                return Response.ok(user).build()
+            }
+            return Response.notModified(user.hashCode().toString()).build()
         }
         return Response.status(404).build()
     }

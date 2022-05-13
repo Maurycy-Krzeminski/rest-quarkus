@@ -48,13 +48,15 @@ class TaskResource(
         val allCount = all.list().toMutableList()
         val list = all.page(Page.of(pageRequest.pageNum, pageRequest.pageSize))
             .list().toMutableList()
-        while (list.removeIf{
-                it.name==null
-            }){}
+        while (list.removeIf {
+                it.name == null
+            }) {
+        }
 
-        while (allCount.removeIf{
-                it.name==null
-            }){}
+        while (allCount.removeIf {
+                it.name == null
+            }) {
+        }
 
         val count = allCount.count()
         var pagesCount = count / pageRequest.pageSize
@@ -83,7 +85,7 @@ class TaskResource(
     @Path("/{id}")
     fun getById(@PathParam("id") id: Long): Response? {
         val task = taskRepository.findById(id) ?: return Response.status(404).build()
-        if(task.name==null)return Response.status(404).build()
+        if (task.name == null) return Response.status(404).build()
         return Response.ok(task).tag(task.hashCode().toString()).build()
     }
 
@@ -93,7 +95,7 @@ class TaskResource(
         val task = Task()
         taskRepository.persist(task)
         val uri = uriInfo.absolutePathBuilder.path(task.id.toString()).build()
-        return Response.created(uri).entity(task).build()
+        return Response.created(uri).entity(task).header("etag", task.hashCode().toString()).build()
     }
 
     @PUT
@@ -102,7 +104,7 @@ class TaskResource(
     fun update(
         @PathParam("id") id: Long,
         @Valid taskRequest: TaskRequest,
-        @HeaderParam("etag") eTag: String
+        @HeaderParam("If-Match") eTag: String?
     ): Response {
         val task = taskRepository.findById(id)
         val userCreator = userRepository.findById(taskRequest.userCreator)
@@ -111,15 +113,15 @@ class TaskResource(
         if (task != null) {
             if (eTag != task.hashCode().toString()) return Response.notModified(task.hashCode().toString()).build()
             if (userAssigned != null) {
-                if(userAssigned.email==null){
+                if (userAssigned.email == null) {
                     return Response.status(404).build()
                 }
                 if (group != null) {
-                    if(group.name==null){
+                    if (group.name == null) {
                         return Response.status(404).build()
                     }
                     if (userCreator != null) {
-                        if(userCreator.email==null){
+                        if (userCreator.email == null) {
                             return Response.status(404).build()
                         }
                         task.name = taskRequest.name
@@ -131,6 +133,48 @@ class TaskResource(
                         return Response.ok(task).build()
                     }
                 }
+            }
+        }
+        return Response.status(404).build()
+    }
+
+
+    @PUT
+    @Transactional
+    @Path("/{id}")
+    fun firstUpdate(
+        @PathParam("id") id: Long,
+        @Valid taskRequest: TaskRequest,
+    ): Response {
+        val task = taskRepository.findById(id)
+        val userCreator = userRepository.findById(taskRequest.userCreator)
+        val userAssigned = userRepository.findById(taskRequest.userAssigned)
+        val group = groupRepository.findById(taskRequest.group)
+        if (task != null) {
+            if (task.name == null) {
+                if (userAssigned != null) {
+                    if (userAssigned.email == null) {
+                        return Response.status(404).build()
+                    }
+                    if (group != null) {
+                        if (group.name == null) {
+                            return Response.status(404).build()
+                        }
+                        if (userCreator != null) {
+                            if (userCreator.email == null) {
+                                return Response.status(404).build()
+                            }
+                            task.name = taskRequest.name
+                            task.description = taskRequest.description
+                            task.status = taskRequest.status
+                            task.groupId = group.id
+                            task.userCreatorId = userCreator.id
+                            task.userAssignedId = userAssigned.id
+                            return Response.ok(task).build()
+                        }
+                    }
+                }
+                return Response.notModified(task.hashCode().toString()).build()
             }
         }
         return Response.status(404).build()
